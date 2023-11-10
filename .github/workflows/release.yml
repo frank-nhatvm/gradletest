@@ -10,6 +10,7 @@ jobs:
     env:
       AAR_FILE_PATH: ''
       AAR_FILE_NAME: ''
+      TEST_PATH: ''
 
     steps:
 
@@ -32,16 +33,21 @@ jobs:
         id: buildAAR
         run: ./gradlew :jchart:clean && ./gradlew :jchart:releaseSDK
 
+      - name: Test ENV value
+        run: |
+          echo "TEST_PATH = test_path " >> "$GITHUB_ENV"
+         
+
       - name: Find AAR Path
         run: |
-          echo "AAR_FILE_PATH =$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> $GITHUB_ENV
+          echo "AAR_FILE_PATH =$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> "$GITHUB_ENV"
 
       - name: AAR file name
         run: |
-          echo "AAR_FILE_NAME =$(basename $AAR_FILE_PATH)" >> $GITHUB_ENV
+          echo "AAR_FILE_NAME =$(basename $AAR_FILE_PATH)" >> "$GITHUB_ENV"
 
       - name: Test AAR Path
         run: |
-          echo "Gradle Task Result: filePath: $AAR_FILE_PATH fileName: $AAR_FILE_NAME"
+          echo "Gradle Task Result: testPath: $TEST_PATH filePath: $AAR_FILE_PATH fileName: $AAR_FILE_NAME"
 
 
