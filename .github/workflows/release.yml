@@ -8,8 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      AAR_FILE_PATH:''
-      AAR_FILE_NAME:''
+      AAR_FILE_PATH: ''
+      AAR_FILE_NAME: ''
 
     steps:
 
