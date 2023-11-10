@@ -1,3 +1,5 @@
+import com.android.build.gradle.tasks.PackageApplication
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -6,7 +8,7 @@ version = "1.4.5"
 
 android {
     namespace = "com.frank.jchart"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26
@@ -24,11 +26,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -45,33 +47,22 @@ dependencies {
 tasks.register("namingAARFile") {
     doLast {
         val version = project.version.toString()
-        println("namingAARFile task:  Version $version")
-
         val aarFilePath = "${project.projectDir}/build/outputs/aar/${project.name}-release.aar"
-        println("aarFilePath : $aarFilePath")
         val aarFile = File(aarFilePath)
         if (aarFile.exists()) {
-            println("AAR file exists")
             val newAARFileName = "${project.name}-$version.aar"
             val renamedFile = File(aarFile.parent, newAARFileName)
             aarFile.renameTo(renamedFile)
-        } else {
-            println("AAR file does not exists")
+            println("Task Result: ${renamedFile.path}")
+        }else{
+            println("Task Result:build/outputs/aar/fail.aar")
         }
     }
 }
 
-
-afterEvaluate {
-    tasks.named("assembleRelease"){
-        dependsOn("test")
-        finalizedBy("namingAARFile")
-    }
+tasks.register("releaseSDK"){
+    dependsOn("test","assembleRelease")
+    finalizedBy("namingAARFile")
 }
 
-
-//tasks.register("namiSDKRelease"){
-//    dependsOn("assembleRelease")
-//    finalizedBy("namingAARFile")
-//}
 
