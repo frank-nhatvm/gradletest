@@ -39,7 +39,7 @@ jobs:
       - name: AAR file name
         id: findAARFileName
         run: | 
-          echo "AAR_FILE_NAME=$(basename "${{ steps.findAARPath.outputs.AAR_FILE_PATH }}" >> "$GITHUB_OUTPUT"
+          echo "AAR_FILE_NAME=$(basename "${{ steps.findAARPath.outputs.AAR_FILE_PATH }}")" >> "$GITHUB_OUTPUT"
 
       - name: Test AAR Path
         run: |
