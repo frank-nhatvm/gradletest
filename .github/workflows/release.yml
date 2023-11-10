@@ -36,10 +36,12 @@ jobs:
 
       - name: Find AAR Path
         run: |
+          echo "aar file path $(find jchart/build/outputs/aar/ -type f -name '*.aar')"
           echo "AAR_FILE_PATH =$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> "$GITHUB_ENV"
 
       - name: AAR file name
         run: |
+          echo "aar file name $(basename $AAR_FILE_PATH)" 
           echo "AAR_FILE_NAME =$(basename $AAR_FILE_PATH)" >> "$GITHUB_ENV"
 
       - name: Test AAR Path
