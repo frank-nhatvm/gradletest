@@ -10,11 +10,6 @@ jobs:
 
     steps:
 
-      - name: Setup tools
-        run: |
-         apt-get update
-         apt-get install -y unzip
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
