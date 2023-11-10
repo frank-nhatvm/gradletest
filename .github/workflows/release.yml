@@ -24,39 +24,33 @@ jobs:
         with:
             sdk-version: 34
 
-
       - name: Build AAR
         id: buildAAR
         run: ./gradlew :jchart:clean && ./gradlew :jchart:releaseSDK
 
-      - name: Test ENV value
-        run: |
-          echo "test_path = test/path/output " >> "$GITHUB_ENV"
-         
-
       - name: Find AAR Path
+        id: findAARPath
         run: |
-          echo "aar file path $(find jchart/build/outputs/aar/ -type f -name '*.aar')"
-          echo "AAR_FILE_PATH=$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> "$GITHUB_ENV"
+          echo "AAR_FILE_PATH=$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> "$GITHUB_OUTPUT"
 
       - name: Debug AAR_FILE_PATH
-        run: echo "AAR_FILE_PATH is $AAR_FILE_PATH"
+        run: echo "AAR_FILE_PATH is ${{ steps.findAARPath.outputs.AAR_FILE_PATH }}"
 
       - name: AAR file name
-        run: |
-          echo "aar file name $(basename "$AAR_FILE_PATH")" 
-          echo "AAR_FILE_NAME=$(basename "$AAR_FILE_PATH")" >> "$GITHUB_ENV"
+        id: findAARFileName
+        run: | 
+          echo "AAR_FILE_NAME=$(basename "$AAR_FILE_PATH")" >> "$GITHUB_OUTPUT"
 
       - name: Test AAR Path
         run: |
-          echo "Gradle Task Result: testPath: $test_path filePath: $AAR_FILE_PATH fileName: $AAR_FILE_NAME"
+          echo "Gradle Task Result: filePath: ${{ steps.findAARPath.outputs.AAR_FILE_PATH }} fileName: ${{ steps.findAARFileName.outputs.AAR_FILE_NAME }}"
 
       - name: Upload AAR to Release
         uses: actions/upload-release-asset@v1
         with:
             upload_url: ${{ github.event.release.upload_url }}
-            asset_path: ${{ AAR_FILE_PATH }}
-            asset_name: ${{ AAR_FILE_NAME }}
+            asset_path: ${{ steps.findAARPath.outputs.AAR_FILE_PATH }}
+            asset_name: ${{ steps.findAARFileName.outputs.AAR_FILE_NAME }}
             asset_content_type: application/zip
             token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
 
