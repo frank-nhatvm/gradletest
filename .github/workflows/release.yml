@@ -30,13 +30,15 @@ jobs:
         run: ./gradlew :jchart:clean && ./gradlew :jchart:releaseSDK
 
       - name: Find AAR Path
-        id: findAARPath
         run: |
-          echo "taskOutput =$(find jchart/build/outputs/aar/ -type f -name '*.aar')"
-          echo "::set-output name=output::$taskOutput"
+          echo "aarFilePath =$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> $GITHUB_ENV
+
+      - name: AAR file name
+        run: |
+          echo "aarFileName =$(basename $aarFilePath)" >> $GITHUB_ENV
 
       - name: Test AAR Path
         run: |
-          echo "Gradle Task Result: ${{ steps.findAARPath.outputs.output }}"
+          echo "Gradle Task Result: filePath: $aarFilePath fileName: $aarFileName"
 
 
