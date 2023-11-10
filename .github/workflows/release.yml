@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      AAR_FILE_PATH:''
+      AAR_FILE_NAME:''
 
     steps:
 
@@ -31,14 +34,14 @@ jobs:
 
       - name: Find AAR Path
         run: |
-          echo "aarFilePath =$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> $GITHUB_ENV
+          echo "AAR_FILE_PATH =$(find jchart/build/outputs/aar/ -type f -name '*.aar')" >> $GITHUB_ENV
 
       - name: AAR file name
         run: |
-          echo "aarFileName =$(basename $aarFilePath)" >> $GITHUB_ENV
+          echo "AAR_FILE_NAME =$(basename $AAR_FILE_PATH)" >> $GITHUB_ENV
 
       - name: Test AAR Path
         run: |
-          echo "Gradle Task Result: filePath: $aarFilePath fileName: $aarFileName"
+          echo "Gradle Task Result: filePath: $AAR_FILE_PATH fileName: $AAR_FILE_NAME"
 
 
